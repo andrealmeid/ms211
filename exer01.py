@@ -1,5 +1,5 @@
 # Exercicio 1 - MS 211 - Turma L
-# Zero de função - Bisseccao; Newton; Secante
+# Zero de funcao - Bisseccao; Newton; Secante
 # Andre Figueiredo de Almeida
 # RA: 164047
 
@@ -61,11 +61,11 @@ print("Fazendo bisseccao em [0.1, 2] com 1 de precisao:")
 print(bisseccao(0.1, 2, 1))
 
 print("\n- Newton - ")
-print("Fazendo por método de Newton com " + str(p) + " dígitos de precisao:")
+print("Fazendo por metodo de Newton com " + str(p) + " digitos de precisao:")
 print(newton(bisseccao(0.1, 2, 1), p))
 
 print("\n- Secante - ")
-print("Fazendo por método da secante com " + str(p) + " dígitos de precisao:")
+print("Fazendo por metodo da secante com " + str(p) + " digitos de precisao:")
 print(secante(bisseccao(0.1, 2, 1), bisseccao(0.1, 1.5, 1), p))
 
 
@@ -95,7 +95,7 @@ def imprimeGrafico(a, b):
 
     plt.plot(x_pontos, y_pontos, linewidth=3)
     plt.xlabel("Anos")
-    plt.ylabel("População")
+    plt.ylabel("Populacao")
     plt.title("Crescimento populacional")
     plt.show()
 
