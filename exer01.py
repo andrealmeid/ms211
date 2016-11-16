@@ -70,8 +70,8 @@ print(secante(bisseccao(0.1, 2, 1), bisseccao(0.1, 1.5, 1), p))
 
 
 # esse programa tambem plota o grafico da funcao
-# para isso, eh necessario instalar o pacote matplotlib para python
-# e descomentar as duas ultimas linhas
+# essas ultimas linhas fazem isso
+# em caso de erro nessa parte, por favor desconsiderar
 
 def imprimeGrafico(a, b):
     # imprime o grafico da funcao no intervalo a <= x <= b
@@ -99,5 +99,6 @@ def imprimeGrafico(a, b):
     plt.title("Crescimento populacional")
     plt.show()
 
-#import matplotlib.pyplot as plt
-#imprimeGrafico(-5, 5)
+import matplotlib.pyplot as plt
+print("\nPlotando grafico...")
+imprimeGrafico(-5, 5)
