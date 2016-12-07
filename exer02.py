@@ -2,14 +2,43 @@
 # Fatoracao LU & Metodo de Newton para Sistemas nao-lineares
 # Andre Figueiredo de Almeida
 # RA: 164047
+# Joao Victor Brazileu Spuri
+# RA: 155943
+
+#importa a bibliotece matematica
+#e define algumas constantes e funcoes
 
 import math
-
 e = math.exp(1)
 pi = math.pi
 sin = math.sin
 cos = math.cos
+abs = math.fabs
+p = 10**-6
 
+#funcao de alocacao de matriz
+def criaMatriz(tam):
+    M = []
+    for i in range(0, tam):
+        M.append([])
+    return M
+
+#imprime uma matriz m 3x3
+def imprimeMatriz(m):
+    s = ""
+    for i in range(0, 3):
+        for j in range(0, 3):
+            s += str(m[i][j]) + " "
+        print(s)
+        s = ""
+    print()
+
+def imprimeX(x):
+    for i in range(0, 3):
+        print("x" + str(i) + " = " + str(x[i]))
+    print()
+
+#vetor de funcoes para calcula F
 Fx = []
 
 def F1(x1, x2, x3):
@@ -27,6 +56,14 @@ def F3(x1, x2, x3):
 Fx.append(F1)
 Fx.append(F2)
 Fx.append(F3)
+
+F = criaMatriz(3)
+
+def calculaF(x1, x2, x3):
+    for i in range(0, 3):
+        F[i] = Fx[i](x1, x2, x3)
+
+#matriz J com suas respectivas funcoes
 
 def J11(x1, x2, x3):
     return 3
@@ -55,16 +92,8 @@ def J32(x1, x2, x3):
 def J33(x1, x2, x3):
     return 20
 
-def criaMatriz(tam):
-    M = []
-    for i in range(0, tam):
-        M.append([])
-    return M
-
-F = criaMatriz(3)
+#posicionamento dos elementos na matriz
 J = criaMatriz(3)
-L = criaMatriz(3)
-U = criaMatriz(3)
 J[0].append(J11)
 J[0].append(J12)
 J[0].append(J13)
@@ -75,27 +104,14 @@ J[2].append(J31)
 J[2].append(J32)
 J[2].append(J33)
 
-def printM(m):
-    s = ""
-    for i in range(0, 3):
-        for j in range(0, 3):
-            s += str(m[i][j]) + " "
-        print(s)
-        s = ""
-
-
-def subtrairLinhas(l1, l2, m):
-    for i in range(0, 3):
-        U[l2][i] -= U[l1][i] * m
-
 def calculaJ(x1, x2, x3):
     for i in range(0, 3):
         for j in range (0, 3):
             J[i][j] = J[i][j](x1, x2, x3)
 
-def calculaF(x1, x2, x3):
-    for i in range(0, 3):
-        F[i] = Fx[i](x1, x2, x3)
+#aloca as matrizes L e U e calcula elas a partir do J
+L = criaMatriz(3)
+U = criaMatriz(3)
 
 def calculaLU():
     for i in range(0, 3):
@@ -117,7 +133,8 @@ def calculaLU():
             for k in range(0, 3):
                 U[j][k] -= U[i][k]*m
 
-def resolveS():
+#resolve o sistema usando as matrizes L e U
+def resolveSistema():
     k1 = -F[0];
     k2 = -F[1] - (L[1][0]*k1);
     k3 = -F[2] - (L[2][0]*k1) - (L[2][1]*k2);
@@ -128,19 +145,48 @@ def resolveS():
     y.append((k1 - y[1]*U[0][1] - y[0]*U[0][2]) / U[0][0])
     return y
 
-def calculaPorraToda(x1, x2, x3):
-    calculaJ(x1, x2, x3)
+def verificaPrecisao(p, xa, xb):
+    for i in range(0, 3):
+        if abs(xa[i] - xb[i]) > p:
+            return True
+    return False
+
+#calcula uma solucao para o sistema F usando o metodo de Newton modificado
+def metodoNewton(x):
+    print("Resolvendo o sitema com o chute inicial ("+str(x[0])+","+str(x[1])+","+str(x[2])+")\n")
+
+    print("Calculando Jacobiano...")
+    calculaJ(x[0], x[1], x[2])
+    print("Matriz Jacobiana J(x0):\n")
+    imprimeMatriz(J)
+
+    print("Calculando L e U...")
     calculaLU()
+    print("Matriz L:\n")
+    imprimeMatriz(L)
+    print("Matriz U:\n")
+    imprimeMatriz(U)
 
-    for i in range(0, 7):
-        print("x1 = " + str(x1))
-        print("x2 = " + str(x2))
-        print("x3 = " + str(x3))
-        print()
-        calculaF(x1, x2, x3)
-        y = resolveS()
-        x1 += y[2]
-        x2 += y[1]
-        x3 += y[0]
+    print("iteracao 1")
+    imprimeX(x)
 
-calculaPorraToda(0, 0, 0)
+    calculaF(x[0], x[1], x[2])
+    y = resolveSistema()
+    xp = [x[0]+y[2], x[1]+y[1], x[2]+y[0]]
+
+    print("iteracao 2")
+    imprimeX(xp)
+
+    iteracao = 2
+    while(verificaPrecisao(p, x, xp)):
+        x = xp
+        calculaF(x[0], x[1], x[2])
+        y = resolveSistema()
+        xp = [x[0]+y[2], x[1]+y[1], x[2]+y[0]]
+
+        iteracao+=1
+        print("iteracao " + str(iteracao))
+        imprimeX(xp)
+
+x0 = [0, 0, 0]
+metodoNewton(x0)
