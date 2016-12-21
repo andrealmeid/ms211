@@ -1,6 +1,5 @@
 # ms211
-Códigos para a disciplina de Cálculo Numérico do IMECC - Unicamp
-Cursada no segundo semestre de 2016
+Códigos para a disciplina de Cálculo Numérico do IMECC - Unicamp, cursada no segundo semestre de 2016.
 
 É necessário ter Python instalado para rodar os programas.
 
